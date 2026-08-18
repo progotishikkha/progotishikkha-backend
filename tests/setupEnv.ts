@@ -1,0 +1,17 @@
+process.env.NODE_ENV = "test";
+process.env.PORT = "5051";
+process.env.CLIENT_URL = "http://localhost:3000";
+process.env.MONGODB_URI = "mongodb://127.0.0.1:27017/progoti-shikkha-test";
+process.env.JWT_ACCESS_SECRET = "test_access_secret_1234567890";
+process.env.JWT_ACCESS_EXPIRES_IN = "15m";
+process.env.JWT_REFRESH_SECRET = "test_refresh_secret_1234567890";
+process.env.JWT_REFRESH_EXPIRES_IN = "7d";
+process.env.COOKIE_SECRET = "test_cookie_secret_1234567890";
+process.env.BCRYPT_SALT_ROUNDS = "4"; // low cost factor for fast tests
+process.env.RESEND_API_KEY = "re_test_dummy_key";
+process.env.EMAIL_FROM = "Progoti Shikkha <onboarding@resend.dev>";
+process.env.CLOUDINARY_CLOUD_NAME = "test";
+process.env.CLOUDINARY_API_KEY = "test";
+process.env.CLOUDINARY_API_SECRET = "test";
+process.env.RATE_LIMIT_WINDOW_MS = "900000";
+process.env.RATE_LIMIT_MAX = "1000"; // high limit so rate limiting doesn't interfere with test runs
