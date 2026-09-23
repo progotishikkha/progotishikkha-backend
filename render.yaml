@@ -1,0 +1,90 @@
+services:
+  - type: web
+    name: progoti-shikkha-backend
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CLIENT_URL
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: COOKIE_SECRET
+        generateValue: true
+      - key: BCRYPT_SALT_ROUNDS
+        value: 12
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: "Progoti Shikkha <onboarding@resend.dev>"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX
+        value: 100
+      - key: DONATION_PERCENTAGE
+        value: 10
+      - key: DONATION_BKASH_NUMBER
+        sync: false
+
+  # Runs the idempotent overdue-donation sweep on a schedule (spec section
+  # 18). Uses the same database and secrets as the web service above but is
+  # a separate Render resource type so it isn't tied to web traffic/uptime.
+  # Adjust the schedule to your grace-period policy; every 30 minutes is a
+  # safe default since re-running the job is a no-op for anything already
+  # processed.
+  - type: cron
+    name: progoti-shikkha-donation-overdue-sweep
+    runtime: node
+    plan: starter
+    region: singapore
+    schedule: "*/30 * * * *"
+    buildCommand: npm install && npm run build
+    startCommand: npm run job:overdue
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: COOKIE_SECRET
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: "Progoti Shikkha <onboarding@resend.dev>"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: DONATION_PERCENTAGE
+        value: 10
+      - key: DONATION_BKASH_NUMBER
+        sync: false
+      - key: CLIENT_URL
+        sync: false
